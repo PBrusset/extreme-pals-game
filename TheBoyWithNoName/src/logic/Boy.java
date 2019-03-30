@@ -57,7 +57,7 @@ public class Boy {
     /* ******************* */
 
     // DISPLACEMENT is the distance covered by a single step of the character
-    private static int DISPLACEMENT = 4;
+    private static final int DISPLACEMENT = 4;
 
     // jump_count works with JUMP_COUNTER_THRESH: in particular this
     // Variable is incremented every time the main thread calls the checkState()
@@ -186,8 +186,10 @@ public class Boy {
         if (DISPLACEMENTPLUS<MAX_SPEED) {
         	DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
         	}
+
+
         // Attempt to move left by DISPLACEMENT amount
-        currentX = (int) checkMove(currentX, currentX - DISPLACEMENTPLUS, isLastLevel);
+        currentX = checkMove(currentX, currentX - DISPLACEMENT, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
     }
 
@@ -197,10 +199,13 @@ public class Boy {
         if (DISPLACEMENTPLUS<MAX_SPEED) {
             DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
         	}
+
+
         // Attempt to move right by DISPLACEMENT amount
-        currentX = (int)checkMove(currentX, currentX + DISPLACEMENTPLUS, isLastLevel);
+        currentX = checkMove(currentX, currentX + DISPLACEMENT, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
     }
+
     
     double DISPLACEMENTPLUS = 1;
     double MAX_SPEED = 7;
@@ -209,11 +214,13 @@ public class Boy {
     	DISPLACEMENTPLUS = 1;
     }
 
+
     // Check whether the location the player wants to move into
     // Is not out of bounds and does not contain a block
     // If so, return the new position
     // Otherwise, return the old one
-    private double checkMove(int oldX, double newX, boolean isLastLevel) {
+    private int checkMove(int oldX, int newX, boolean isLastLevel) {
+    	
         if (newX <= 0) {
             return 0;
         }
@@ -222,7 +229,7 @@ public class Boy {
             return (Settings.WINDOW_WIDTH - BOY_WIDTH);
         }
 
-        boundingBox.setLocation((int)newX, currentY);
+        boundingBox.setLocation(newX, currentY);
 
         // Get the tile position (in the tiled map)
         // Relative to the tile in front of the character
@@ -241,14 +248,37 @@ public class Boy {
         if (footCol < 0 || footCol >= World.cols) {
             return newX;
         }
-
+        int maxFootY = (int) (boundingBox.getMaxY());
         int footY = (int) (boundingBox.getMaxY());
         int footRow = ((footY - 1) / Settings.TILE_SIZE);
+        int maxfootRow = ((maxFootY + 1) / Settings.TILE_SIZE);
+
 
         Block tileInFrontOfFoot = World.map[footRow][footCol];
+        Block tileOnTopOfFoot = World.map[maxfootRow][footCol-1];
+        
 
+        if(!tileInFrontOfFoot.empty()  && tileInFrontOfFoot.intersects(boundingBox) && tileInFrontOfFoot.getName().equals("spikes Top-Right")) {
+        	die();
+    	}
+
+        if(!tileOnTopOfFoot.empty()  && tileOnTopOfFoot.getName().equals("spikes Top-Right")) {
+        	
+        	die();
+    	}
+        if(!tileInFrontOfFoot.empty()  && tileInFrontOfFoot.intersects(boundingBox) && tileInFrontOfFoot.getName().equals("Terrain Top 2")) {
+        	givelife();
+    	}
+
+        if(!tileOnTopOfFoot.empty()  && tileOnTopOfFoot.getName().equals("Terrain Top 2")) {
+        	
+        	givelife();
+    	}
+        
+        
         if (!tileInFrontOfFoot.empty() && tileInFrontOfFoot.intersects(boundingBox)) {
-            return oldX;
+//            System.out.println(tileInFrontOfFoot.getName());
+        	return oldX;
         }
         
         NPC supernpc = World.getNpc();
@@ -261,45 +291,53 @@ public class Boy {
         	return newX;
         	
         }
-       
         return newX;
     }
 
     // Called every time the player presses the jump key
+    boolean secondJump;
     public void startJumping() {
-        if (!jumping && !falling) {
-        	jumping=true;            
+    	secondJump = true;
+    	if (!falling) {
+            jumping = true;
+
+            // Reinitialise the jump_count, useful to determine for how
+            // Much time the character is going to stay in the air
             jump_count = 0;
         }
+    	secondJump = false;
     }
 
     // Increments the jumping counter and moves character up if jumping
     // Check the comments above 'jumping' and 'jump_count' variables
     // For more details
     public void handleJumping() {
-    	NPC supernpc = World.getNpc();
+       NPC supernpc = World.getNpc();
         
-        if(supernpc.intersects_npc(boundingBox)) {
+       if(supernpc.intersects_npc(boundingBox)) {
         	die();
         	return;
-        }
-        if (jumping) {
-            
-            if (jump_count < JUMP_COUNTER_THRESH && currentY - DISPLACEMENT >= 0) {
-                currentY -= DISPLACEMENT;
-                boundingBox.setLocation(currentX, currentY);
-            }
-            
-            jump_count++;
-            
-            if(jump_count >= JUMP_COUNTER_THRESH) {
-            	jumping = false;
-            	jump_count = 0;
-            	falling = true;
-            }
+       }
+    	 if (jumping) {
+    		 if(secondJump) {
+    			 jump_count = 0;
+    		 }
+    	        if (jump_count < JUMP_COUNTER_THRESH
+    	            && currentY - DISPLACEMENT >= 0) {
+    	            currentY -= DISPLACEMENT;
+    	            boundingBox.setLocation(currentX, currentY);
+    	        }
 
-            checkBlockCollisions();
-        }
+    	        jump_count++;
+
+    	        if (jump_count >= JUMP_COUNTER_THRESH){
+    	            jumping = false;
+    	            jump_count = 0;
+    	            falling = true;
+    	        }
+
+    	        checkBlockCollisions();
+    	    }
     }
 
     // Checks and handles possible collisions with static blocks (Block class)
@@ -430,6 +468,12 @@ public class Boy {
         restoring = true;
         restoring_count = RESTORING_THRESH;
         life--;
+    }
+    private void givelife() {
+        resetPosition();
+        restoring = true;
+        restoring_count = RESTORING_THRESH;
+        life++;
     }
 
     /* ******* */

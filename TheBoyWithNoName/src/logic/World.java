@@ -70,6 +70,7 @@ public class World {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
 
         // The second line contains colour configuration
         // We ignore this and any other lines until the map data completely

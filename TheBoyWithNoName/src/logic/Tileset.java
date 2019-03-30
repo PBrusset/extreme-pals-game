@@ -25,10 +25,20 @@ public class Tileset {
         tiles.put(id, tile);
     }
 
+    public static int a;
     public Tile getTile(int id) {
+    	a = id;
         return tiles.get(id);
     }
 
+    
+    
+    
+    /*number of columns you want the block to move
+    public Tile getTile(int id, int numCol) {
+    	Tile moving = new tiles.get(id);
+    }*/
+    
     public void loadTilesFromDisk() {
         // Load the tileset file
         InputStream is = getClass().getResourceAsStream(Settings.tileset);

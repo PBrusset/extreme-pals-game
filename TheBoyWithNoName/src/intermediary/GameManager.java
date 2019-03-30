@@ -60,7 +60,6 @@ public class GameManager extends Thread {
         while (gameIsRunning) {
             if (!paused) {
                 if (boy.outOfBounds()) {
-                	boy.stopmoving();
                     try {
                         currentLevel++;
                         world.loadLevel(currentLevel);
@@ -72,8 +71,8 @@ public class GameManager extends Thread {
                 
                 npc.move();
 
-                boy.handleFalling();
-                boy.handleJumping();
+                 boy.handleFalling();
+                 boy.handleJumping();
                 boy.checkRestoringCount();
                 gameIsRunning = boy.isAlive();
             }
@@ -119,13 +118,16 @@ public class GameManager extends Thread {
             }
 
             // If jump key is pressed - make the boy jump
-            if (currentKeys.contains(KeyEvent.VK_SPACE)) {
+           boolean secondJump;
+            if(currentKeys.contains(KeyEvent.VK_SPACE)) {
+            
             	boy.startJumping();
+            	
             }
+            // TODO: implement me!
 
             // If the player is not pressing any keys, make the boy stand still
             else if (currentKeys.isEmpty() && !boy.getJumping() && !boy.getFalling()) {
-            	boy.stopmoving();
                 boy.stop();
             }
         }
