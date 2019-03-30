@@ -36,7 +36,7 @@ public class StatsPanel extends JPanel {
         try {
             background  = ImageIO.read(getClass().getResource("/images/statsBar.png"));
             livingHeart = ImageIO.read(getClass().getResource("/images/livingHeart.png"));
-            deadHeart   = ImageIO.read(getClass().getResource("/images/deadHeart.png"));
+            deadHeart   = ImageIO.read(getClass().getResource("/images/deht.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
