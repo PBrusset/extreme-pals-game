@@ -55,6 +55,7 @@ public class GameManager extends Thread {
         while (gameIsRunning) {
             if (!paused) {
                 if (boy.outOfBounds()) {
+                	boy.stopmoving();
                     try {
                         currentLevel++;
                         world.loadLevel(currentLevel);
@@ -117,6 +118,7 @@ public class GameManager extends Thread {
 
             // If the player is not pressing any keys, make the boy stand still
             else if (currentKeys.isEmpty() && !boy.getJumping() && !boy.getFalling()) {
+            	boy.stopmoving();
                 boy.stop();
             }
         }

@@ -57,7 +57,7 @@ public class Boy {
     /* ******************* */
 
     // DISPLACEMENT is the distance covered by a single step of the character
-    private static final int DISPLACEMENT = 4;
+    private static int DISPLACEMENT = 4;
 
     // jump_count works with JUMP_COUNTER_THRESH: in particular this
     // Variable is incremented every time the main thread calls the checkState()
@@ -183,26 +183,32 @@ public class Boy {
     public void moveLeft(boolean isLastLevel) {
         idle = false;
         facingDirection = KeyEvent.VK_LEFT;
-
+        DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
         // Attempt to move left by DISPLACEMENT amount
-        currentX = checkMove(currentX, currentX - DISPLACEMENT, isLastLevel);
+        currentX = (int) checkMove(currentX, currentX - DISPLACEMENTPLUS, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
     }
 
     public void moveRight(boolean isLastLevel) {
         idle = false;
         facingDirection = KeyEvent.VK_RIGHT;
-
+        DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
         // Attempt to move right by DISPLACEMENT amount
-        currentX = checkMove(currentX, currentX + DISPLACEMENT, isLastLevel);
+        currentX = (int)checkMove(currentX, currentX + DISPLACEMENTPLUS, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
+    }
+    
+    double DISPLACEMENTPLUS = 2;
+    
+    public void stopmoving() {
+    	DISPLACEMENTPLUS = 2;
     }
 
     // Check whether the location the player wants to move into
     // Is not out of bounds and does not contain a block
     // If so, return the new position
     // Otherwise, return the old one
-    private int checkMove(int oldX, int newX, boolean isLastLevel) {
+    private double checkMove(int oldX, double newX, boolean isLastLevel) {
         if (newX <= 0) {
             return 0;
         }
@@ -211,7 +217,7 @@ public class Boy {
             return (Settings.WINDOW_WIDTH - BOY_WIDTH);
         }
 
-        boundingBox.setLocation(newX, currentY);
+        boundingBox.setLocation((int)newX, currentY);
 
         // Get the tile position (in the tiled map)
         // Relative to the tile in front of the character
@@ -239,7 +245,6 @@ public class Boy {
         if (!tileInFrontOfFoot.empty() && tileInFrontOfFoot.intersects(boundingBox)) {
             return oldX;
         }
-
         return newX;
     }
 
