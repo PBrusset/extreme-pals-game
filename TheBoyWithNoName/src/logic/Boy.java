@@ -37,7 +37,7 @@ public class Boy {
 
     // The initial position of the character
     public static final int BOY_START_X = 2 * Settings.TILE_SIZE;
-    public static final int BOY_START_Y = 6 * Settings.TILE_SIZE;
+    public static final int BOY_START_Y = 6   * Settings.TILE_SIZE;
     // The current position of the character
     private int currentX;
     private int currentY;
@@ -183,7 +183,9 @@ public class Boy {
     public void moveLeft(boolean isLastLevel) {
         idle = false;
         facingDirection = KeyEvent.VK_LEFT;
-        DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
+        if (DISPLACEMENTPLUS<MAX_SPEED) {
+        	DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
+        	}
         // Attempt to move left by DISPLACEMENT amount
         currentX = (int) checkMove(currentX, currentX - DISPLACEMENTPLUS, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
@@ -192,16 +194,19 @@ public class Boy {
     public void moveRight(boolean isLastLevel) {
         idle = false;
         facingDirection = KeyEvent.VK_RIGHT;
-        DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
+        if (DISPLACEMENTPLUS<MAX_SPEED) {
+            DISPLACEMENTPLUS = DISPLACEMENTPLUS + 0.1;
+        	}
         // Attempt to move right by DISPLACEMENT amount
         currentX = (int)checkMove(currentX, currentX + DISPLACEMENTPLUS, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
     }
     
-    double DISPLACEMENTPLUS = 2;
+    double DISPLACEMENTPLUS = 1;
+    double MAX_SPEED = 7;
     
     public void stopmoving() {
-    	DISPLACEMENTPLUS = 2;
+    	DISPLACEMENTPLUS = 1;
     }
 
     // Check whether the location the player wants to move into
@@ -245,6 +250,18 @@ public class Boy {
         if (!tileInFrontOfFoot.empty() && tileInFrontOfFoot.intersects(boundingBox)) {
             return oldX;
         }
+        
+        NPC supernpc = World.getNpc();
+        
+        //System.out.println(boundingBox);
+        //System.out.println(supernpc.getBoundingBox());
+        
+        if(supernpc.intersects_npc(boundingBox)) {    	
+        	die();
+        	return newX;
+        	
+        }
+       
         return newX;
     }
 
@@ -260,6 +277,12 @@ public class Boy {
     // Check the comments above 'jumping' and 'jump_count' variables
     // For more details
     public void handleJumping() {
+    	NPC supernpc = World.getNpc();
+        
+        if(supernpc.intersects_npc(boundingBox)) {
+        	die();
+        	return;
+        }
         if (jumping) {
             
             if (jump_count < JUMP_COUNTER_THRESH && currentY - DISPLACEMENT >= 0) {
@@ -344,6 +367,14 @@ public class Boy {
         if (currentRow + 1 >= World.rows) {
             die();
             return;
+        }
+        
+        NPC supernpc = World.getNpc();
+        
+        if(supernpc.intersects_npc(boundingBox)) {
+        	System.out.println("yay");
+        	die();
+        	return;
         }
 
         // Since the character is wider than one tile but less wide than two
