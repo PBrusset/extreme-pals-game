@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashSet;
 import logic.Boy;
 import logic.KeyboardController;
+import logic.NPC;
 import logic.World;
 import gui.GameFrame;
 import gui.GamePanel;
@@ -19,6 +20,7 @@ public class GameManager extends Thread {
     private static final int MAIN_SLEEP_TIME = 16;
 
     private Boy       boy;
+    private NPC       npc;
     private World     world;
     private GamePanel gamePanel;
     private GameFrame gameFrame;
@@ -34,8 +36,11 @@ public class GameManager extends Thread {
     public GameManager(GamePanel gamePanel, GameFrame gameFrame) {
         this.world = new World();
         this.boy = new Boy();
+        this.npc = new NPC();
+        this.world.addNPC(npc);
         this.gamePanel = gamePanel;
         this.gamePanel.addBoy(boy);
+        this.gamePanel.addNPC(npc);
         this.gameFrame = gameFrame;
 
         try {
@@ -63,9 +68,11 @@ public class GameManager extends Thread {
                     }
                     boy.resetPosition();
                 }
+                
+                npc.move();
 
-                // boy.handleFalling();
-                // boy.handleJumping();
+                 boy.handleFalling();
+                 boy.handleJumping();
                 boy.checkRestoringCount();
                 gameIsRunning = boy.isAlive();
             }
@@ -102,15 +109,21 @@ public class GameManager extends Thread {
         if (!paused) {
             // If right arrow is pressed - move the boy right
             if (currentKeys.contains(KeyEvent.VK_RIGHT)) {
-                boy.moveLeft(isLastLevel());
+                boy.moveRight(isLastLevel());
             }
 
             // If left arrow is pressed - move the boy left
             if (currentKeys.contains(KeyEvent.VK_LEFT)) {
-                boy.moveRight(isLastLevel());
+                boy.moveLeft(isLastLevel());
             }
 
             // If jump key is pressed - make the boy jump
+           boolean secondJump;
+            if(currentKeys.contains(KeyEvent.VK_SPACE)) {
+            
+            	boy.startJumping();
+            	
+            }
             // TODO: implement me!
 
             // If the player is not pressing any keys, make the boy stand still
