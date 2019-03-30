@@ -118,6 +118,7 @@ public class GameManager extends Thread {
             }
 
             // If jump key is pressed - make the boy jump
+<<<<<<< HEAD
            boolean secondJump;
             if(currentKeys.contains(KeyEvent.VK_SPACE)) {
             
@@ -125,6 +126,11 @@ public class GameManager extends Thread {
             	
             }
             // TODO: implement me!
+=======
+            if(currentKeys.contains(KeyEvent.VK_SPACE)) {
+            	boy.startJumping();
+            }
+>>>>>>> refs/remotes/origin/Abigail
 
             // If the player is not pressing any keys, make the boy stand still
             else if (currentKeys.isEmpty() && !boy.getJumping() && !boy.getFalling()) {

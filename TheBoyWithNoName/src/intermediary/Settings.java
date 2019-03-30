@@ -16,7 +16,7 @@ public class Settings {
     /* Game properties */
     public static final int TILE_SIZE   = 64;
     public static final int FIRST_LEVEL = 1;
-    public static final int LAST_LEVEL  = 2;
+    public static final int LAST_LEVEL  = 6;
 
     // Number of the run animation frames of the player in the spritesheet
     public static final int BOY_RUN_FRAMES = 6;
@@ -38,6 +38,7 @@ public class Settings {
     }
 
     public static String levelBackgroundImage(int level) {
+    	//return ("/images/background.png");
         return ("/images/background" + String.valueOf(level) + ".png");
     }
 
