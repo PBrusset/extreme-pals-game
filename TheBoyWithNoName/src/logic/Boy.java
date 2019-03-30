@@ -297,7 +297,6 @@ public class Boy {
     // Called every time the player presses the jump key
     boolean secondJump;
     public void startJumping() {
-<<<<<<< HEAD
     	secondJump = true;
     	if (!falling) {
             jumping = true;
@@ -308,32 +307,13 @@ public class Boy {
         }
     	secondJump = false;
     }
-=======
 
-    	    if (!jumping && !falling) {
-    	        jumping = true;
-
-    	        // Reinitialise the jump_count, useful to determine for how
-    	        // Much time the character is going to stay in the air
-    	       jump_count = 1;
-    	    }
-    	}
-    	/*if (currentY - DISPLACEMENT >= 0) {
-        	jumping = true;
-           currentY -= DISPLACEMENT;
-            boundingBox.setLocation(currentX, currentY);
-            jump_count = 0;
-    	}
-  
-}*/
-    
->>>>>>> refs/remotes/origin/Abigail
 
     // Increments the jumping counter and moves character up if jumping
     // Check the comments above 'jumping' and 'jump_count' variables
     // For more details
     public void handleJumping() {
-<<<<<<< HEAD
+
        NPC supernpc = World.getNpc();
         
        if(supernpc.intersects_npc(boundingBox)) {
@@ -349,18 +329,7 @@ public class Boy {
     	            currentY -= DISPLACEMENT;
     	            boundingBox.setLocation(currentX, currentY);
     	        }
-=======
-        if (jumping) {
-        	
-        	if(jump_count<JUMP_COUNTER_THRESH && currentY - DISPLACEMENT >= 0) {
-        		currentY -= DISPLACEMENT;
-        		boundingBox.setLocation(currentX, currentY);
-        		
-        	}
-        	
-        	
-            jump_count++;
->>>>>>> refs/remotes/origin/Abigail
+
 
     	        jump_count++;
 
