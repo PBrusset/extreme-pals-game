@@ -64,8 +64,8 @@ public class GameManager extends Thread {
                     boy.resetPosition();
                 }
 
-                // boy.handleFalling();
-                // boy.handleJumping();
+                boy.handleFalling();
+                boy.handleJumping();
                 boy.checkRestoringCount();
                 gameIsRunning = boy.isAlive();
             }
