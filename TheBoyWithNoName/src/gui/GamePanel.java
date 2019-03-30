@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import intermediary.Settings;
 import logic.Boy;
 import logic.KeyboardController;
+import logic.NPC;
 
 // The game panel, which is a container for all the other panels
 // It has little behaviour of its own
@@ -37,6 +38,11 @@ public class GamePanel extends JPanel {
         playPanel.addBoy(boy);
         statsPanel.addBoy(boy);
     }
+    
+    public void addNPC(NPC npc) {
+        playPanel.addNPC(npc);
+    }
+
 
     public void repaintGame() {
         playPanel.repaint();

@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import intermediary.Settings;
 import logic.Boy;
+import logic.NPC;
 import logic.World;
 
 // PlayPanel - the playable area of the game
@@ -15,6 +16,7 @@ public class PlayPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private Boy boy;
+    private NPC npc;
 
     public PlayPanel() {
         this.setSize(Settings.WINDOW_WIDTH, Settings.PLAY_PANEL_HEIGHT);
@@ -38,6 +40,10 @@ public class PlayPanel extends JPanel {
     // times
     public void addBoy(Boy boy) {
         this.boy = boy;
+    }
+    
+    public void addNPC (NPC npc) {
+    	this.npc=npc;
     }
 
     @Override
@@ -63,7 +69,13 @@ public class PlayPanel extends JPanel {
         // Draw the protagonist of the game
         if (boy != null && !boy.getRestoring()) {
             g2.drawImage(boy.getCurrentFrame(), boy.getCurrentX(), boy.getCurrentY(), null);
-            // g2.draw(boy.getBoundingBox());
+            //g2.draw(boy.getBoundingBox());
+        }
+        
+        if (npc != null) {
+            g2.drawImage(npc.getCurrentFrame(), npc.getCurrentX(), npc.getCurrentY(), null);
+            //g2.draw(npc.getBoundingBox());
+            //System.out.println("boxy" + npc.getBoundingBox());
         }
     }
 }

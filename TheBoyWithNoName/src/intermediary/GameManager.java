@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashSet;
 import logic.Boy;
 import logic.KeyboardController;
+import logic.NPC;
 import logic.World;
 import gui.GameFrame;
 import gui.GamePanel;
@@ -19,6 +20,7 @@ public class GameManager extends Thread {
     private static final int MAIN_SLEEP_TIME = 16;
 
     private Boy       boy;
+    private NPC       npc;
     private World     world;
     private GamePanel gamePanel;
     private GameFrame gameFrame;
@@ -34,8 +36,11 @@ public class GameManager extends Thread {
     public GameManager(GamePanel gamePanel, GameFrame gameFrame) {
         this.world = new World();
         this.boy = new Boy();
+        this.npc = new NPC();
+        this.world.addNPC(npc);
         this.gamePanel = gamePanel;
         this.gamePanel.addBoy(boy);
+        this.gamePanel.addNPC(npc);
         this.gameFrame = gameFrame;
 
         try {
@@ -63,6 +68,8 @@ public class GameManager extends Thread {
                     }
                     boy.resetPosition();
                 }
+                
+                npc.move();
 
                  boy.handleFalling();
                  boy.handleJumping();
