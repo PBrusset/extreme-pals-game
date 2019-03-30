@@ -49,8 +49,8 @@ public class Boy {
     private Rectangle boundingBox;
 
     // Dimensions of the main character (used to set the boundingBox)
-    private final int BOY_HEIGHT = 64;
-    private final int BOY_WIDTH  = 32;
+    private final int BOY_HEIGHT = 45;
+    private final int BOY_WIDTH  = 20;
 
     /* ******************* */
     /* Movement properties */
@@ -142,18 +142,19 @@ public class Boy {
                                              Settings.BOY_SPRITE_HEIGHT);
 
             idle_L = spritesheet.getSubimage(0,
-                                             Settings.BOY_SPRITE_HEIGHT,
+            								 Settings.BOY_SPRITE_HEIGHT,
                                              Settings.BOY_SPRITE_WIDTH,
                                              Settings.BOY_SPRITE_HEIGHT);
 
             for (int i = 0; i < Settings.BOY_RUN_FRAMES; i++) {
-                run_R[i] = spritesheet.getSubimage((i + 1) * Settings.BOY_SPRITE_WIDTH,
+            	
+                run_R[i] = spritesheet.getSubimage((i+1) * Settings.BOY_SPRITE_WIDTH,
                                                    0,
                                                    Settings.BOY_SPRITE_WIDTH, 
                                                    Settings.BOY_SPRITE_HEIGHT);
 
-                run_L[i] = spritesheet.getSubimage((i + 1) * Settings.BOY_SPRITE_WIDTH,
-                                                   Settings.BOY_SPRITE_HEIGHT,
+                run_L[i] = spritesheet.getSubimage((i+1) * Settings.BOY_SPRITE_WIDTH,
+                								   Settings.BOY_SPRITE_HEIGHT,
                                                    Settings.BOY_SPRITE_WIDTH,
                                                    Settings.BOY_SPRITE_HEIGHT);
             }
@@ -187,6 +188,15 @@ public class Boy {
         // Attempt to move left by DISPLACEMENT amount
         currentX = checkMove(currentX, currentX - DISPLACEMENT, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
+        
+        // Change the current frame in animation
+        if (!jumping && !falling) {
+            setFrameNumber();
+            currentFrame = run_L[currentFrameNumber];
+        } else {
+            currentFrame = run_L[0];
+        }
+        moveCounter++;
     }
 
     public void moveRight(boolean isLastLevel) {
@@ -196,6 +206,15 @@ public class Boy {
         // Attempt to move right by DISPLACEMENT amount
         currentX = checkMove(currentX, currentX + DISPLACEMENT, isLastLevel);
         boundingBox.setLocation(currentX, currentY);
+        
+        // Change the current frame in animation
+        if (!jumping && !falling) {
+            setFrameNumber();
+            currentFrame = run_R[currentFrameNumber];
+        } else {
+            currentFrame = run_R[0];
+        }
+        moveCounter++;
     }
 
     // Check whether the location the player wants to move into
@@ -245,9 +264,19 @@ public class Boy {
 
     // Called every time the player presses the jump key
     public void startJumping() {
-        if (currentY - DISPLACEMENT >= 0) {
-            currentY -= DISPLACEMENT;
-            boundingBox.setLocation(currentX, currentY);
+    	if (!jumping && !falling) {
+            jumping = true;
+
+            // Reinitialise the jump_count, useful to determine for how
+            // Much time the character is going to stay in the air
+            jump_count = 0;
+
+            // Sets the current jumping frame based on the last direction
+            if (facingDirection == KeyEvent.VK_RIGHT) {
+                currentFrame = run_R[2];
+            } else {
+                currentFrame = run_L[2];
+            }
         }
     }
 
@@ -255,10 +284,16 @@ public class Boy {
     // Check the comments above 'jumping' and 'jump_count' variables
     // For more details
     public void handleJumping() {
-        if (jumping) {
+    	if (jumping) {
+            if (jump_count < JUMP_COUNTER_THRESH
+                && currentY - DISPLACEMENT >= 0) {
+                currentY -= DISPLACEMENT;
+                boundingBox.setLocation(currentX, currentY);
+            }
+
             jump_count++;
 
-            if (jump_count >= JUMP_COUNTER_THRESH) {
+            if (jump_count >= JUMP_COUNTER_THRESH){
                 jumping = false;
                 jump_count = 0;
                 falling = true;
