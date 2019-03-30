@@ -11,6 +11,7 @@ public class Block {
     private int col;
     private Tile tile;
     private Rectangle boundingBox;
+    //private Rectangle ImaginaryBox;
 
     public Block(int row, int col, Tile tile) {
         this.row = row * Settings.TILE_SIZE;
@@ -20,7 +21,14 @@ public class Block {
                                          row * Settings.TILE_SIZE,
                                          Settings.TILE_SIZE,
                                          Settings.TILE_SIZE);
+        
     }
+       
+   
+  
+  
+    
+    
     
     public boolean empty() {
         return tile == null;
@@ -33,12 +41,16 @@ public class Block {
     public Image getImage() {
         return tile.getImage();
     }
-    
+   
     public boolean intersects(Rectangle boundingBox) {
-        return this.boundingBox.intersects(boundingBox);
+    	
+    	return this.boundingBox.intersects(boundingBox);
     }
     
     public Rectangle getBoundingBox() {
         return boundingBox;
     }
+  //  public Rectangle getImaginaryBox() {
+    	
+   // }
 }

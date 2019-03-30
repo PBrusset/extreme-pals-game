@@ -19,6 +19,7 @@ public class GameFrame extends JFrame {
 
         this.setSize(Settings.WINDOW_WIDTH, Settings.WINDOW_HEIGHT);
         this.setTitle(Settings.WINDOW_TITLE);
+        
         this.setVisible(true);
         this.setResizable(false);
 
