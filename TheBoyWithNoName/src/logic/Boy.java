@@ -245,9 +245,9 @@ public class Boy {
 
     // Called every time the player presses the jump key
     public void startJumping() {
-        if (currentY - DISPLACEMENT >= 0) {
-            currentY -= DISPLACEMENT;
-            boundingBox.setLocation(currentX, currentY);
+        if (!jumping && !falling) {
+        	jumping=true;            
+            jump_count = 0;
         }
     }
 
@@ -256,12 +256,18 @@ public class Boy {
     // For more details
     public void handleJumping() {
         if (jumping) {
+            
+            if (jump_count < JUMP_COUNTER_THRESH && currentY - DISPLACEMENT >= 0) {
+                currentY -= DISPLACEMENT;
+                boundingBox.setLocation(currentX, currentY);
+            }
+            
             jump_count++;
-
-            if (jump_count >= JUMP_COUNTER_THRESH) {
-                jumping = false;
-                jump_count = 0;
-                falling = true;
+            
+            if(jump_count >= JUMP_COUNTER_THRESH) {
+            	jumping = false;
+            	jump_count = 0;
+            	falling = true;
             }
 
             checkBlockCollisions();
