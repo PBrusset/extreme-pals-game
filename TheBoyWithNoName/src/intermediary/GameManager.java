@@ -71,8 +71,10 @@ public class GameManager extends Thread {
                 
                 npc.move();
 
+
                  boy.handleFalling();
                  boy.handleJumping();
+
                 boy.checkRestoringCount();
                 gameIsRunning = boy.isAlive();
             }
@@ -117,6 +119,7 @@ public class GameManager extends Thread {
                 boy.moveLeft(isLastLevel());
             }
 
+
             // If jump key is pressed - make the boy jump
 
            boolean secondJump;
@@ -125,6 +128,7 @@ public class GameManager extends Thread {
             	boy.startJumping();
             	
             }
+
 
 
 

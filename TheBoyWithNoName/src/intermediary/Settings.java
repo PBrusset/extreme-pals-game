@@ -19,14 +19,14 @@ public class Settings {
     public static final int LAST_LEVEL  = 6;
 
     // Number of the run animation frames of the player in the spritesheet
-    public static final int BOY_RUN_FRAMES = 6;
+    public static final int BOY_RUN_FRAMES = 11;
 
     // Dimensions of the boy sprite
-    public static final int BOY_SPRITE_WIDTH  = 40;
-    public static final int BOY_SPRITE_HEIGHT = 64;
+    public static final int BOY_SPRITE_WIDTH  = 32;
+    public static final int BOY_SPRITE_HEIGHT = 66;
 
     /* Asset paths */
-    public static final String playerSpritesheet = "/images/player.png";
+    public static final String playerSpritesheet = "/images/peach-enlarged.png";
     public static final String tileset           = "/levels/tileset.txt";
 
     public static String tileImage(String imageFile) {
